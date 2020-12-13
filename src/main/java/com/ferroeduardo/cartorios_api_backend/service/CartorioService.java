@@ -8,6 +8,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Example;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
@@ -74,7 +75,7 @@ public class CartorioService {
     public Cartorio save(Cartorio cartorio) throws ApiCustomException {
         if (cartorio == null) {
             logger.warn("Cartório é null, erro ao tentar salvar no banco de dados");
-            throw new ApiCustomException("O objeto enviado para salvar no banco é 'null'");
+            throw new ApiCustomException("O objeto enviado para salvar no banco é 'null'", HttpStatus.BAD_REQUEST);
         }
         return cartorioRepository.save(cartorio);
     }
