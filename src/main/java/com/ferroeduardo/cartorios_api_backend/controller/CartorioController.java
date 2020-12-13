@@ -11,12 +11,13 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping(path = "/api")
 public class CartorioController {
 
-    Logger logger = LoggerFactory.getLogger(CartorioController.class);
+    private final Logger logger;
 
     private final CartorioService cartorioService;
 
     public CartorioController(CartorioService cartorioService) {
         this.cartorioService = cartorioService;
+        this.logger = LoggerFactory.getLogger(CartorioController.class);
     }
 
     @GetMapping(path = "/cartorios")

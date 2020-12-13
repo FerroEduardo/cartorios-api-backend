@@ -15,12 +15,13 @@ import java.util.Optional;
 @Service
 public class CartorioService {
 
-    Logger logger = LoggerFactory.getLogger(CartorioService.class);
+    private final Logger logger;
 
     private final CartorioRepository cartorioRepository;
 
     public CartorioService(CartorioRepository cartorioRepository) {
         this.cartorioRepository = cartorioRepository;
+        this.logger = LoggerFactory.getLogger(CartorioService.class);
     }
 
     public Iterable<Cartorio> findAll() {
