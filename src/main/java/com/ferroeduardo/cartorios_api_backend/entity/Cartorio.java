@@ -1,34 +1,67 @@
 package com.ferroeduardo.cartorios_api_backend.entity;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-
-import javax.persistence.Entity;
-import javax.persistence.Id;
+import javax.persistence.*;
 import java.util.Objects;
 
-@Entity(name = "cartorios")
+@Entity
+@Table(name = "cartorios_api_dados")
 public class Cartorio {
     @Id
-    @JsonIgnore
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(name = "uf", length = 2)
     private String uf;
+
+    @Column(name = "cnpj", length = 18)
     private String cnpj;
+
+    @Column(name = "nome_oficial", length = 150)
     private String nomeOficial;
+
+    @Column(name = "nome_fantasia", length = 150)
     private String nomeFantasia;
+
+    @Column(name = "endereco", length = 120)
     private String endereco;
+
+    @Column(name = "bairro", length = 50)
     private String bairro;
+
+    @Column(name = "municipio", length = 50)
     private String municipio;
+
+    @Column(name = "cep", length = 9)
     private String cep;
+
+    @Column(name = "nome_do_titular", length = 110)
     private String nomeDoTitular;
+
+    @Column(name = "nome_do_substituto", length = 110)
     private String nomeDoSubstituto;
+
+    @Column(name = "nome_do_juiz", length = 110)
     private String nomeDoJuiz;
+
+    @Column(name = "homepage", length = 90)
     private String homepage;
+
+    @Column(name = "email", length = 120)
     private String email;
+
+    @Column(name = "telefone", length = 40)
     private String telefone;
+
+    @Column(name = "fax", length = 40)
     private String fax;
+
+    @Column(name = "horario_de_funcionamento", length = 150)
     private String horarioDeAtendimento;
+
+    @Column(name = "area_de_abrangencia", length = 720)
     private String areaDeAbrangencia;
+
+    @Column(name = "atribuicoes", length = 550)
     private String atribuicoes;
 
     public Cartorio(Long id, String uf, String cnpj, String nomeOficial, String nomeFantasia, String endereco, String bairro, String municipio, String cep, String nomeDoTitular, String nomeDoSubstituto, String nomeDoJuiz, String homepage, String email, String telefone, String fax, String horarioDeAtendimento, String areaDeAbrangencia, String atribuicoes) {
