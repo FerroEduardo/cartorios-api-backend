@@ -9,13 +9,16 @@ import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.util.ClassUtils;
 import org.springframework.web.bind.MissingServletRequestParameterException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 import org.springframework.web.servlet.NoHandlerFoundException;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.Map;
+import java.util.Objects;
 import java.util.TreeMap;
 
 @RestControllerAdvice
@@ -91,7 +94,20 @@ public class ExceptionResolver {
         errorMap.put("message", "Algo estranho deve ter acontecido, tente novamente mais tarde");
         errorMap.put("path", request.getRequestURL().toString());
         errorMap.put("status", responseStatus.value());
-        logger.error(exception.getMessage(), exception);
+        logger.warn(exception.getMessage(), exception);
+        String response = objectMapper.writeValueAsString(errorMap);
+
+        return ResponseEntity.status(responseStatus).contentType(MediaType.APPLICATION_JSON).body(response);
+    }
+
+    @ExceptionHandler(MethodArgumentTypeMismatchException.class)
+    public ResponseEntity<?> argumentTypeMismatch(MethodArgumentTypeMismatchException exception, HttpServletRequest request) throws JsonProcessingException {
+        Map<String, Object> errorMap = new TreeMap<>();
+        HttpStatus responseStatus = HttpStatus.BAD_REQUEST;
+        errorMap.put("message", String.format("O tipo do argumento providenciado não corresponde ao da aplicação. Utilizado: %s, Requisitado: %s", ClassUtils.getDescriptiveType(exception.getValue()), ClassUtils.getQualifiedName(Objects.requireNonNull(exception.getRequiredType()))));
+        errorMap.put("path", request.getRequestURL().toString());
+        errorMap.put("status", responseStatus.value());
+        logger.warn(exception.getMessage());
         String response = objectMapper.writeValueAsString(errorMap);
 
         return ResponseEntity.status(responseStatus).contentType(MediaType.APPLICATION_JSON).body(response);
