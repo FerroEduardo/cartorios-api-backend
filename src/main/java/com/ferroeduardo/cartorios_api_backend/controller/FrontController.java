@@ -15,6 +15,7 @@ import static org.springframework.data.domain.ExampleMatcher.matching;
 
 @RestController
 @RequestMapping(path = "/api/frontend")
+@CrossOrigin(origins = {"http://localhost:8090"})
 public class FrontController {
 
     private final Logger logger;
