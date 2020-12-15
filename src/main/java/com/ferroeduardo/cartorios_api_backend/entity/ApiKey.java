@@ -20,15 +20,11 @@ public class ApiKey {
     @Column(name = "user_id", nullable = false, unique = true)
     private Long userId;
 
-    @Column(name = "key", length = 36, nullable = true, unique = true)
+    @Column(name = "api_key", length = 36, nullable = true, unique = true)
     private String key;
 
     public ApiKey(Long userId, String key) {
         this.userId = userId;
         this.key = key;
-    }
-
-    public ApiKey(Long id) {
-        this.id = id;
     }
 }

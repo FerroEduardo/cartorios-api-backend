@@ -9,7 +9,7 @@ public interface ApiKeyRepository extends CrudRepository<ApiKey, Long> {
 
     Optional<ApiKey> findByUserId(Long userId);
 
-    Optional<ApiKey> findByToken(String token);
+    Optional<ApiKey> findByKey(String apiKey);
 
     boolean existsByUserId(Long userId);
 }

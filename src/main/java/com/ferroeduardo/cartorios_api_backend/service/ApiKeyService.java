@@ -15,56 +15,56 @@ public class ApiKeyService {
 
     private Logger logger = LoggerFactory.getLogger(ApiKeyService.class);
 
-    private ApiKeyRepository tokenRepository;
+    private ApiKeyRepository apiKeyRepository;
 
-    public ApiKeyService(ApiKeyRepository tokenRepository) {
-        this.tokenRepository = tokenRepository;
+    public ApiKeyService(ApiKeyRepository apiKeyRepository) {
+        this.apiKeyRepository = apiKeyRepository;
     }
 
-    public ApiKey findByToken(String token) throws ApiKeyNotFoundException {
-        Optional<ApiKey> apiTokenOptional = tokenRepository.findByToken(token);
-        return apiTokenOptional.orElseThrow(() -> new ApiKeyNotFoundException(token));
+    public ApiKey findByApiKey(String apiKey) throws ApiKeyNotFoundException {
+        Optional<ApiKey> apiApiKeyOptional = apiKeyRepository.findByKey(apiKey);
+        return apiApiKeyOptional.orElseThrow(() -> new ApiKeyNotFoundException(apiKey));
     }
 
     public ApiKey findByUserId(Long userId) throws ApiKeyNotFoundException {
-        Optional<ApiKey> apiTokenOptional = tokenRepository.findByUserId(userId);
-        return apiTokenOptional.orElseThrow(() -> new ApiKeyNotFoundException(userId));
+        Optional<ApiKey> apiApiKeyOptional = apiKeyRepository.findByUserId(userId);
+        return apiApiKeyOptional.orElseThrow(() -> new ApiKeyNotFoundException(userId));
     }
 
-    public String createNewToken(Long userId) {
+    public String createNewApiKey(Long userId) {
         UUID uuid = UUID.randomUUID();
-        String token = uuid.toString();
+        String apiKey = uuid.toString();
 
         try {
-            ApiKey apiToken = findByUserId(userId);
-            apiToken.setKey(token);
-            tokenRepository.save(apiToken);
-            logger.info(String.format("Token do userId='%d' já existia e um novo foi criado com sucesso", userId));
+            ApiKey apiApiKey = findByUserId(userId);
+            apiApiKey.setKey(apiKey);
+            apiKeyRepository.save(apiApiKey);
+            logger.info(String.format("Api key do userId='%d' já existia e um novo foi criado com sucesso", userId));
         } catch (ApiKeyNotFoundException e) {
-            ApiKey apiToken = new ApiKey(userId, token);
-            tokenRepository.save(apiToken);
-            logger.info(String.format("Token do userId='%d' não existia antes e um novo criado com sucesso", userId));
+            ApiKey apiApiKey = new ApiKey(userId, apiKey);
+            apiKeyRepository.save(apiApiKey);
+            logger.info(String.format("Api key do userId='%d' não existia antes e um novo criado com sucesso", userId));
         } catch (Exception e) {
             logger.error(e.getMessage(), e);
         }
-        return token;
+        return apiKey;
     }
 
-    public boolean validToken(String token) {
+    public boolean validApiKey(String apiKey) {
         try {
-            ApiKey apiToken = findByToken(token);
-            return apiToken.getKey() != null;
+            ApiKey apiApiKey = findByApiKey(apiKey);
+            return apiApiKey.getKey() != null;
         } catch (ApiKeyNotFoundException e) {
             logger.warn(e.getMessage(), e);
             return false;
         }
     }
 
-    public boolean revokeToken(Long userId) {
+    public boolean revokeApiKey(Long userId) {
         try {
-            ApiKey apiToken = findByUserId(userId);
-            apiToken.setKey(null);
-            tokenRepository.save(apiToken);
+            ApiKey apiApiKey = findByUserId(userId);
+            apiApiKey.setKey(null);
+            apiKeyRepository.save(apiApiKey);
             return true;
         } catch (ApiKeyNotFoundException e) {
             logger.warn(e.getMessage(), e);
@@ -73,14 +73,14 @@ public class ApiKeyService {
     }
 
     public boolean exists(Long userId) {
-        return tokenRepository.existsByUserId(userId);
+        return apiKeyRepository.existsByUserId(userId);
     }
 
     public ApiKey createRow(Long userId) {
         if (this.exists(userId)) {
-            return tokenRepository.findByUserId(userId).orElseThrow(() -> new ApiKeyNotFoundException(userId));
+            return apiKeyRepository.findByUserId(userId).orElseThrow(() -> new ApiKeyNotFoundException(userId));
         } else {
-            return tokenRepository.save(new ApiKey(userId, null));
+            return apiKeyRepository.save(new ApiKey(userId, null));
         }
     }
 }

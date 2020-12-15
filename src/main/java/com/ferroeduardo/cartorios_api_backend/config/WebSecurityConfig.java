@@ -37,7 +37,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         servicesFilter.setAuthenticationManager(new CommunicationBetweenServicesAuthManager(servicesCommunicationUtil.serviceUsername, servicesCommunicationUtil.servicePassword));
 
         http.authorizeRequests()
-                .antMatchers("/api/frontend/**")
+                .antMatchers("/api/frontend/**", "/api/token/**")
                     .authenticated()
                 .and()
             .csrf()
