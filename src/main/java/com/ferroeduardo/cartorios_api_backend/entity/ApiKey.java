@@ -14,7 +14,8 @@ import javax.persistence.*;
 public class ApiKey {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @SequenceGenerator(name = "cartorios_api_key_id_seq", sequenceName = "cartorios_api_key_id_seq", allocationSize = 1)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "cartorios_api_key_id_seq")
     private Long id;
 
     @Column(name = "user_id", nullable = false, unique = true)

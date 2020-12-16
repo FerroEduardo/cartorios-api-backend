@@ -7,7 +7,8 @@ import java.util.Objects;
 @Table(name = "cartorios_api_dados")
 public class Cartorio {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @SequenceGenerator(name = "cartorios_api_dados_id_seq", sequenceName = "cartorios_api_dados_id_seq", allocationSize = 1)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "cartorios_api_dados_id_seq")
     private Long id;
 
     @Column(name = "uf", length = 2)
