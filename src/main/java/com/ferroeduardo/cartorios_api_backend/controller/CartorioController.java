@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping(path = "/api")
+@CrossOrigin(origins = {"*"})
 public class CartorioController {
 
     private final Logger logger;
