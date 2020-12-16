@@ -16,6 +16,7 @@ import java.util.TreeMap;
 
 @RestController
 @RequestMapping(path = "/api/key", produces = "application/json", consumes = "application/json")
+@CrossOrigin(origins = {"http://localhost:8090"})
 public class ApiKeyController {
 
     Logger logger = LoggerFactory.getLogger(ApiKeyController.class);
