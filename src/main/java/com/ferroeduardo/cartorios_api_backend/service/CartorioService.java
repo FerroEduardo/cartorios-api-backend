@@ -10,6 +10,7 @@ import org.springframework.data.domain.Example;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
 
@@ -25,26 +26,32 @@ public class CartorioService {
         this.logger = LoggerFactory.getLogger(CartorioService.class);
     }
 
+    @Transactional(readOnly = true)
     public Iterable<Cartorio> findAll() {
         return cartorioRepository.findAll();
     }
 
+    @Transactional(readOnly = true)
     public Iterable<Cartorio> findAll(Example<Cartorio> cartorioExample) {
         return cartorioRepository.findAll(cartorioExample);
     }
 
+    @Transactional(readOnly = true)
     public Iterable<Cartorio> findAll(Pageable pageable) {
         return cartorioRepository.findAll(pageable);
     }
 
+    @Transactional(readOnly = true)
     public Iterable<Cartorio> findAll(Example<Cartorio> cartorioExample, Pageable pageable) {
         return cartorioRepository.findAll(cartorioExample, pageable);
     }
 
+    @Transactional(readOnly = true)
     public Cartorio findById(Long id) throws CartorioNotFoundException {
         return cartorioRepository.findById(id).orElseThrow(() -> new CartorioNotFoundException(id));
     }
 
+    @Transactional(readOnly = false)
     public Cartorio updateCartorio(Long id, Cartorio novo) throws CartorioNotFoundException {
         return cartorioRepository.findById(id).map(cartorio -> {
             cartorio.setUf(novo.getUf());
@@ -69,10 +76,12 @@ public class CartorioService {
         }).orElseThrow(() -> new CartorioNotFoundException(id));
     }
 
+    @Transactional(readOnly = true)
     public Iterable<Cartorio> findByCnpjIgnoreCase(String cnpj) {
         return cartorioRepository.findByCnpjIgnoreCase(cnpj);
     }
 
+    @Transactional(readOnly = false)
     public Cartorio save(Cartorio cartorio) throws ApiCustomException {
         if (cartorio == null) {
             logger.warn("Cartório é null, erro ao tentar salvar no banco de dados");
@@ -81,6 +90,7 @@ public class CartorioService {
         return cartorioRepository.save(cartorio);
     }
 
+    @Transactional(readOnly = false)
     public void deleteById(Long id) throws CartorioNotFoundException {
         Optional<Cartorio> cartorio = cartorioRepository.findById(id);
         if (cartorio.isPresent()) {
@@ -90,6 +100,7 @@ public class CartorioService {
         }
     }
 
+    @Transactional(readOnly = true)
     public long count() {
         return cartorioRepository.count();
     }

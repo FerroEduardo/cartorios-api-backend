@@ -6,6 +6,7 @@ import com.ferroeduardo.cartorios_api_backend.repository.ApiKeyRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
 import java.util.UUID;
@@ -21,16 +22,19 @@ public class ApiKeyService {
         this.apiKeyRepository = apiKeyRepository;
     }
 
+    @Transactional(readOnly = true)
     public ApiKey findByApiKey(String apiKey) throws ApiKeyNotFoundException {
         Optional<ApiKey> apiApiKeyOptional = apiKeyRepository.findByKey(apiKey);
         return apiApiKeyOptional.orElseThrow(() -> new ApiKeyNotFoundException(apiKey));
     }
 
+    @Transactional(readOnly = true)
     public ApiKey findByUserId(Long userId) throws ApiKeyNotFoundException {
         Optional<ApiKey> apiApiKeyOptional = apiKeyRepository.findByUserId(userId);
         return apiApiKeyOptional.orElseThrow(() -> new ApiKeyNotFoundException(userId));
     }
 
+    @Transactional(readOnly = false)
     public String createNewApiKey(Long userId) {
         UUID uuid = UUID.randomUUID();
         String apiKey = uuid.toString();
@@ -50,6 +54,7 @@ public class ApiKeyService {
         return apiKey;
     }
 
+    @Transactional(readOnly = true)
     public boolean validApiKey(String apiKey) {
         try {
             ApiKey apiApiKey = findByApiKey(apiKey);
@@ -60,6 +65,7 @@ public class ApiKeyService {
         }
     }
 
+    @Transactional(readOnly = false)
     public boolean revokeApiKey(Long userId) {
         try {
             ApiKey apiApiKey = findByUserId(userId);
@@ -72,10 +78,12 @@ public class ApiKeyService {
         }
     }
 
+    @Transactional(readOnly = true)
     public boolean exists(Long userId) {
         return apiKeyRepository.existsByUserId(userId);
     }
 
+    @Transactional(readOnly = false)
     public ApiKey createRow(Long userId) {
         if (this.exists(userId)) {
             return apiKeyRepository.findByUserId(userId).orElseThrow(() -> new ApiKeyNotFoundException(userId));
